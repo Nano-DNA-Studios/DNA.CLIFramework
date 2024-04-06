@@ -51,13 +51,11 @@ namespace DNA_CLI_Framework
         /// <param name="args"></param>
         public void RunApplication(string[] args)
         {
-            CommandHandler? commandHandler = Activator.CreateInstance(CommandHandlerType) as CommandHandler;
+            object[] handlerArgs = { args, DataManager.COMMAND_PREFIX };
+            CommandHandler? commandHandler = Activator.CreateInstance(CommandHandlerType, handlerArgs) as CommandHandler;
 
             if (commandHandler != null)
-            {
-                commandHandler.SetCommandPrefix(DataManager.COMMAND_PREFIX);
-                commandHandler.HandleCommands(args);
-            }
+                commandHandler.HandleCommands();
         }
 
         /// <summary>

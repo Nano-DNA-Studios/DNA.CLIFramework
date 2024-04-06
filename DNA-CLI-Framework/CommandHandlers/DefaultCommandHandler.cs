@@ -1,31 +1,23 @@
 ﻿using DNA_CLI_Framework.Commands;
 
-namespace DNA_CLI_Framework
+namespace DNA_CLI_Framework.CommandHandlers
 {
-    /// <summary>
-    /// The CLI Framework Command Handler, responsible for handling the Commands passed in by the User
-    /// </summary>
-    public class CommandHandler
+    public class DefaultCommandHandler : CommandHandler
     {
-        /// <summary>
-        /// The Prefix that seperates individual additional commands
-        /// </summary>
-        private string CommandPrefix { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the CommandHandler class
         /// </summary>
         /// <param name="commandPrefix"> The Prefix that Identifies a single Command </param>
-        public CommandHandler(string commandPrefix)
+        public DefaultCommandHandler() : base()
         {
-            CommandPrefix = commandPrefix;
+
         }
 
         /// <summary>
         /// Handles all the Commands passed in by the User
         /// </summary>
         /// <param name="args"> The Arguments passed by the User </param>
-        public void HandleCommands(string[] args)
+        public override void HandleCommands(string[] args)
         {
             if (args.Length == 0)
                 return;
@@ -45,7 +37,7 @@ namespace DNA_CLI_Framework
         /// </summary>
         /// <param name="commandArguments"> The Command Arguments for the Default Command </param>
         /// <param name="isOnlyDefaultCommand"> Flag Identifying if only the Default Command will be activated or if there are trailing Commands </param>
-        private static void HandleDefaultCommand(string commandArguments, bool isOnlyDefaultCommand)
+        protected override void HandleDefaultCommand(string commandArguments, bool isOnlyDefaultCommand)
         {
             string[] args = commandArguments.Split(" ");
 
@@ -64,7 +56,7 @@ namespace DNA_CLI_Framework
         /// Handles all Additonal Commands passed in by the User
         /// </summary>
         /// <param name="commands"> The Arguments for all the Additional Commands </param>
-        private static void HandleAdditionalCommands(string[] commands)
+        protected override void HandleAdditionalCommands(string[] commands)
         {
             foreach (string command in commands)
             {

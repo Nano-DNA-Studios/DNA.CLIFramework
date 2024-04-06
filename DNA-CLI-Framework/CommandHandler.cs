@@ -1,68 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DNA_CLI_Framework.Commands;
 
 namespace DNA_CLI_Framework
 {
+    /// <summary>
+    /// The CLI Framework Command Handler, responsible for handling the Commands passed in by the User
+    /// </summary>
     public class CommandHandler
     {
-        private const string COMMAND_PREFIX = "--";
-        
+        /// <summary>
+        /// The Prefix that seperates individual additional commands
+        /// </summary>
+        private string CommandPrefix { get; set; }
 
-        public static void HandleCommand(string[] args)
+        /// <summary>
+        /// Initializes a new instance of the CommandHandler class
+        /// </summary>
+        /// <param name="commandPrefix"> The Prefix that Identifies a single Command </param>
+        public CommandHandler(string commandPrefix)
         {
-            if (args.Length < 1)
-            {
-                //Handle no argument command
+            CommandPrefix = commandPrefix;
+        }
+
+        /// <summary>
+        /// Handles all the Commands passed in by the User
+        /// </summary>
+        /// <param name="args"> The Arguments passed by the User </param>
+        public void HandleCommands(string[] args)
+        {
+            if (args.Length == 0)
                 return;
-            }
 
             string combinedArgs = string.Join(" ", args);
-
-            string[] individualCommands = combinedArgs.Split(COMMAND_PREFIX);
-
-            //The Default Command to handle is the first command in the list
+            string[] individualCommands = combinedArgs.Split(CommandPrefix);
             string defaultCommand = individualCommands[0].Trim();
-
-            //The rest of the trailing commands are the arguments
             string[] commands = individualCommands.Skip(1).ToArray();
-
             bool isOnlyDefaultCommand = commands.Length == 0;
 
-
-            Console.WriteLine("Default Command: " + defaultCommand);
-
             HandleDefaultCommand(defaultCommand, isOnlyDefaultCommand);
-
+            HandleAdditionalCommands(commands);
         }
 
-        private static void HandleDefaultCommand(string command, bool isOnlyDefaultCommand)
+        /// <summary>
+        /// Handles the Default Command for the User
+        /// </summary>
+        /// <param name="commandArguments"> The Command Arguments for the Default Command </param>
+        /// <param name="isOnlyDefaultCommand"> Flag Identifying if only the Default Command will be activated or if there are trailing Commands </param>
+        private static void HandleDefaultCommand(string commandArguments, bool isOnlyDefaultCommand)
         {
-            string[] args = command.Split(" ");
+            string[] args = commandArguments.Split(" ");
 
-            //Use a Factory to instantiate the correct command of type Default Command
+            DefaultCommand? defaultCommand = CommandFactory.GetDefaultCommand();
 
+            if (defaultCommand == null)
+                return;
 
-
-
-
-
+            if (isOnlyDefaultCommand)
+                defaultCommand.ExecuteSolo(args);
+            else
+                defaultCommand.Execute(args);
         }
 
+        /// <summary>
+        /// Handles all Additonal Commands passed in by the User
+        /// </summary>
+        /// <param name="commands"> The Arguments for all the Additional Commands </param>
         private static void HandleAdditionalCommands(string[] commands)
         {
+            foreach (string command in commands)
+            {
+                string[] args = command.Split(" ");
 
+                args = args.Where(arg => !string.IsNullOrWhiteSpace(arg)).ToArray();
 
+                Command? commandInstance = CommandFactory.GetCommand(args[0]);
 
+                if (commandInstance != null)
+                    commandInstance.Execute(args.Skip(1).ToArray());
+            }
         }
-
-
-
-
-
-
-
     }
 }

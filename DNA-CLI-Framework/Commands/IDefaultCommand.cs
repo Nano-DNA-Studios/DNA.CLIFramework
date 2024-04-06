@@ -17,16 +17,4 @@
         /// <param name="args"></param>
         public void ExecuteSolo(string[] args);
     }
-
-
-    public abstract class Command
-    {
-        public string CommandName ;
-
-        public string CommandDescription ;
-
-        public abstract void Execute(string[] args);
-    }
-
-
 }

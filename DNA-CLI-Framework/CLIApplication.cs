@@ -1,17 +1,14 @@
-﻿
+﻿using DNA_CLI_Framework.Data;
+using DNA_CLI_Framework.CommandHandlers;
+using DNA_CLI_Framework.Data;
 
 namespace DNA_CLI_Framework
 {
     /// <summary>
     /// Represents the CLI Application, handles all Interaction with the CLI Tool
-    /// </summary>
-    public abstract class CLIApplication
+    /// </summary>s
+    public abstract class CLIApplication<T> where T : DataManager, new()
     {
-        /// <summary>
-        /// The Default Command Prefix for the CLI Application  
-        /// </summary>
-        public const string DEFAULT_COMMAND_PREFIX = "--";
-
         /// <summary>
         /// The Name of the CLI Application
         /// </summary>
@@ -23,20 +20,27 @@ namespace DNA_CLI_Framework
         public static DataManager DataManager { get; set; }
 
         /// <summary>
-        /// The Command Prefix to use for the CLI Application
+        /// The Type of the Command Handler for the CLI Application
         /// </summary>
-        public abstract string COMMAND_PREFIX { get; }
+        public Type CommandHandlerType { get; private set; }
 
         /// <summary>
         /// Initializes a new Instance of the CLI Application
         /// </summary>
-        /// <param name="applicationName"> The Name of the Application </param>
         /// <param name="dataManager"> The Data Manager the CLI Application will use </param>
-        public CLIApplication(DataManager dataManager = null)
+        public CLIApplication()
         {
+            DataManager = ApplicationData<T>.Instance();
+        }
 
+        /// <summary>
+        /// Initializes a new Instance of the CLI Application
+        /// </summary>
+        /// <param name="dataManager"> The Data Manager the CLI Application will use </param>
+        public CLIApplication(T dataManager)
+        {
             if (dataManager == null)
-                DataManager = new DataManager();
+                DataManager = new DefaultDataManager();
             else
                 DataManager = dataManager;
         }
@@ -47,9 +51,11 @@ namespace DNA_CLI_Framework
         /// <param name="args"></param>
         public void RunApplication(string[] args)
         {
-            CommandHandler commandHandler = new CommandHandler(COMMAND_PREFIX);
+            object[] handlerArgs = { args, DataManager.COMMAND_PREFIX };
+            CommandHandler? commandHandler = Activator.CreateInstance(CommandHandlerType, handlerArgs) as CommandHandler;
 
-            commandHandler.HandleCommands(args);
+            if (commandHandler != null)
+                commandHandler.HandleCommands();
         }
 
         /// <summary>
@@ -57,7 +63,16 @@ namespace DNA_CLI_Framework
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T GetDataManager<T>() where T : DataManager => (T)DataManager;
+        public static T GetDataManager() => (T)DataManager;
+
+        /// <summary>
+        /// Sets the Command Handler for the CLI Application
+        /// </summary>
+        /// <param name="commandHandlerType"></param>
+        public void SetCommandHandler<T>() where T : CommandHandler
+        {
+            CommandHandlerType = typeof(T);
+        }
     }
 }
 

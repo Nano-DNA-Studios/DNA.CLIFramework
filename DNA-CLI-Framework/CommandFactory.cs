@@ -48,12 +48,18 @@ namespace DNA_CLI_Framework
         /// <exception cref="Exception"></exception>
         private static void RegisterCommands(Type type)
         {
-            if (type.IsSubclassOf(typeof(Command)))
+            if (type.IsSubclassOf(typeof(Command)) && !type.IsAbstract)
             {
-                Command? command = (Command?)Activator.CreateInstance(type);
+                try
+                {
+                    Command? command = (Command?)Activator.CreateInstance(type);
 
-                if (command != null)
-                    Commands.Add(command.CommandName.ToLower(), type);
+                    if (command != null)
+                        Commands.Add(command.CommandName.ToLower(), type);
+                }
+                finally
+                {
+                }
             }
             else if (type.IsSubclassOf(typeof(DefaultCommand)))
             {

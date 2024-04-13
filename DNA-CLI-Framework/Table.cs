@@ -88,10 +88,16 @@ namespace DNA_CLI_Framework
             }
         }
 
-        private string CenterString(int width, string text)
+        /// <summary>
+        /// Centers the Title of the Table
+        /// </summary>
+        /// <param name="width"> The Width of the Table </param>
+        /// <param name="title"> The Title of the Table </param>
+        /// <returns></returns>
+        private string CenterTitle(int width, string title)
         {
-            int padding = (width - text.Length) / 2;
-            return text.PadLeft(text.Length + padding).PadRight(width - 1);
+            int padding = (width - title.Length) / 2;
+            return title.PadLeft(title.Length + padding).PadRight(width - 1);
         }
 
         /// <summary>
@@ -110,7 +116,7 @@ namespace DNA_CLI_Framework
         private void PrintTitle(int tableWidth)
         {
             PrintLine(tableWidth);
-            Console.WriteLine(_verticalSeparator + CenterString(tableWidth - 1, Title) + _verticalSeparator);
+            Console.WriteLine(_verticalSeparator + CenterTitle(tableWidth - 1, Title) + _verticalSeparator);
         }
 
         /// <summary>

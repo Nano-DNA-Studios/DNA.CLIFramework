@@ -1,6 +1,5 @@
 ﻿using DNA_CLI_Framework.Data;
 using DNA_CLI_Framework.CommandHandlers;
-using DNA_CLI_Framework.Data;
 
 namespace DNA_CLI_Framework
 {

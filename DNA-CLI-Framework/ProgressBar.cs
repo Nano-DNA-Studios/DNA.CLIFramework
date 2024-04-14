@@ -12,40 +12,48 @@ namespace DNA_CLI_Framework
     /// </summary>
     public class ProgressBar
     {
-        /// <summary>
-        /// The Character to use for the Horizontal Separator
-        /// </summary>
-        private string _horizontalSeparator;
+        public struct ProgressBarStyle
+        {
+            public ConsoleColor FillColor;
+            public ConsoleColor EmptyColor;
+            public string HorizontalSeparator;
+            public string VerticalSeparator;
+            public string CrossSeparator;
+            public char ProgressCharacter;
+            public char ProgressBackgroundCharacter;
+        }
+
+        public static ProgressBarStyle DefaultStyle = new ProgressBarStyle
+        {
+            FillColor = ConsoleColor.Green,
+            EmptyColor = ConsoleColor.Gray,
+            HorizontalSeparator = "-",
+            VerticalSeparator = "|",
+            CrossSeparator = "+",
+            ProgressCharacter = '#',
+            ProgressBackgroundCharacter = '.'
+        };
+
+        public static ProgressBarStyle BlueVsBlue = new ProgressBarStyle
+        {
+            FillColor = ConsoleColor.Blue,
+            EmptyColor = ConsoleColor.Red,
+            HorizontalSeparator = "-",
+            VerticalSeparator = "|",
+            CrossSeparator = "+",
+            ProgressCharacter = '#',
+            ProgressBackgroundCharacter = '#'
+        };
 
         /// <summary>
-        /// The Character to use for the Vertical Separator
+        /// The Style of the Progress Bar
         /// </summary>
-        private string _verticalSeparator;
+        public ProgressBarStyle Style { get; set; }
 
         /// <summary>
-        /// The Character to use for the Cross Separator
+        /// The Title of the Progress Bar
         /// </summary>
-        private string _crossSeparator;
-
-        /// <summary>
-        /// The Character to use for the Progress of the Progress Bar
-        /// </summary>
-        private char _progressCharacter = '#'; //'█'
-
-        /// <summary>
-        /// The Character to use for the Background of the Progress Bar
-        /// </summary>
-        private char _progressBackgroundCharacter = '.'; // '░'
-
-        /// <summary>
-        /// The Color of the Fill of the Progress Bar
-        /// </summary>
-        public ConsoleColor FillColor { get; set; }
-
-        /// <summary>
-        /// The Color of the Empty Space of the Progress Bar
-        /// </summary>
-        public ConsoleColor EmptyColor { get; set; }
+        public string Title { get; private set; }
 
         /// <summary>
         /// The Width of the Progress Bar
@@ -96,6 +104,22 @@ namespace DNA_CLI_Framework
         public float Value { get; set; }
 
         /// <summary>
+        /// Default Empty Constructor for the Progress Bar
+        /// </summary>
+        public ProgressBar()
+        {
+            Width = 100;
+            Height = 1;
+            MaxValue = 100;
+            MinValue = 0;
+            Value = MinValue;
+            Title = "";
+            Style = DefaultStyle;
+
+            UseBorder = false;
+        }
+
+        /// <summary>
         /// Default Constructor for the Progress Bar
         /// </summary>
         /// <param name="width"> The Width of the Progress Bar in the Console Window </param>
@@ -104,13 +128,14 @@ namespace DNA_CLI_Framework
         /// <param name="minValue"> The Minimum Value of the Progress Bar </param>
         /// <exception cref="ArgumentOutOfRangeException"> Thrown if the Width or Height are invalid </exception>
         /// <exception cref="Exception"> Thrown if the Minimum Value is Larger than the Max Value </exception>
-        public ProgressBar(int width, int height = 1, float maxValue = 100, float minValue = 0)
+        public ProgressBar(float maxValue = 100, float minValue = 0, string title = "", int width = 100, int height = 1)
         {
             Width = width;
             Height = height;
             MaxValue = maxValue;
             MinValue = minValue;
             Value = minValue;
+            Style = DefaultStyle;
 
             if (Width < 0 || Width > Console.WindowWidth)
                 throw new ArgumentOutOfRangeException("Width must be greater than 0 and Less than Console Window Width.");
@@ -120,9 +145,6 @@ namespace DNA_CLI_Framework
 
             if (MinValue > MaxValue)
                 throw new Exception("The Maximum Value must be Larger than the Minimum Value.");
-
-            SetDefaultSeparators();
-            SetDefaultColors();
 
             UseBorder = false;
         }
@@ -141,34 +163,12 @@ namespace DNA_CLI_Framework
             MaxValue = maxValue;
             MinValue = minValue;
             Value = minValue;
-
+            Style = DefaultStyle;
 
             if (MinValue > MaxValue)
                 throw new Exception("The Maximum Value must be Larger than the Minimum Value.");
 
-            SetDefaultSeparators();
-            SetDefaultColors();
-
             UseBorder = false;
-        }
-
-        /// <summary>
-        /// Sets the Default Colors for the Style of the Progress Bar
-        /// </summary>
-        private void SetDefaultColors()
-        {
-            FillColor = ConsoleColor.Green;
-            EmptyColor = ConsoleColor.Gray;
-        }
-
-        /// <summary>
-        /// Sets the Default Separators for the Style of the Progress Bar
-        /// </summary>
-        private void SetDefaultSeparators()
-        {
-            _horizontalSeparator = "-";
-            _verticalSeparator = "|";
-            _crossSeparator = "+";
         }
 
         /// <summary>
@@ -233,35 +233,37 @@ namespace DNA_CLI_Framework
         /// <param name="width"></param>
         private void PrintLine(int width)
         {
-            Console.WriteLine(_crossSeparator + new string(char.Parse(_horizontalSeparator), width - 2) + _crossSeparator);
+            Console.WriteLine(Style.CrossSeparator + new string(char.Parse(Style.HorizontalSeparator), width - 2) + Style.CrossSeparator);
         }
 
         /// <summary>
-        /// Prints the Progress Bar Portion to the Console
+        /// Centers the Title of the Table
         /// </summary>
-        /// <param name="width"></param>
-        private void PrintProgress(int width)
+        /// <param name="width"> The Width of the Table </param>
+        /// <param name="title"> The Title of the Table </param>
+        /// <returns> The String Title Centered based on the Width </returns>
+        private string CenterTitle(int width, string title)
         {
-            int progressWidth = (int)(width * Progress);
-            int halfHeight = Height / 2;
+            int padding = (width - title.Length) / 2;
+            return title.PadLeft(title.Length + padding).PadRight(width - 1);
+        }
 
-            for (int i = 0; i < Height; i++)
+        /// <summary>
+        /// Prints the Title of the Table to the Console
+        /// </summary>
+        /// <param name="tableWidth"> The Table Width in Characters </param>
+        private void PrintTitle()
+        {
+            //int width = UseBorder ? Width - 2 : Width;
+
+            if (!UseBorder)
             {
-                Console.ForegroundColor = FillColor;
-                Console.Write(new string(_progressCharacter, progressWidth));
-
-                Console.ForegroundColor = EmptyColor;
-                Console.Write(new string(_progressBackgroundCharacter, width - progressWidth));
-
-                if (i == halfHeight)
-                {
-                    Console.ResetColor();
-                    Console.Write($"  |  {ProgressPercentage}%");
-                }
-
-
-                Console.WriteLine();
+                Console.WriteLine(CenterTitle(Width - 1, Title));
+                return;
             }
+
+            PrintLine(Width);
+            Console.WriteLine(Style.VerticalSeparator + CenterTitle(Width - 1, Title) + Style.VerticalSeparator);
         }
 
         /// <summary>
@@ -269,32 +271,51 @@ namespace DNA_CLI_Framework
         /// </summary>
         public void PrintProgressBar()
         {
+            int width = UseBorder ? Width - 2 : Width;
+            int progressWidth = (int)(width * Progress);
+            int halfHeight = Height / 2;
+
+            if (!string.IsNullOrEmpty(Title))
+                PrintTitle();
+
             if (UseBorder)
+                PrintLine(Width);
+
+            for (int i = 0; i < Height; i++)
             {
-                PrintLine(Width);
-                int widthWithoutBorder = Width - 2;
+                if (UseBorder)
+                    Console.Write(Style.VerticalSeparator);
+
+                Console.ForegroundColor = Style.FillColor;
+                Console.Write(new string(Style.ProgressCharacter, progressWidth));
+
+                Console.ForegroundColor = Style.EmptyColor;
+                Console.Write(new string(Style.ProgressBackgroundCharacter, width - progressWidth));
+
                 Console.ResetColor();
-                Console.Write(_verticalSeparator);
+                if (UseBorder)
+                    Console.Write(Style.VerticalSeparator);
 
-                PrintProgress(widthWithoutBorder);
+                if (i == halfHeight)
+                    Console.Write($"  |  {ProgressPercentage}%");
 
-                Console.ResetColor();
-                Console.WriteLine(_verticalSeparator);
-
-                PrintLine(Width);
+                Console.WriteLine();
             }
-            else
-                PrintProgress(Width);
+
+            if (UseBorder)
+                PrintLine(Width);
         }
 
         /// <summary>
         /// Prints a Progress Bar to the Console given the Progress Value
         /// </summary>
         /// <param name="progress"> The Progress Value </param>
+        /// <param name="title"> The Title of the Progress Bar </param>
+        /// <param name="style"> The Style of the Progress Bar </param>
         /// <exception cref="ArgumentOutOfRangeException"> Thrown if the Progress Value is invalid in any way Less than 0, More than 100 </exception>
-        public static void PrintProgressBar(float progress)
+        public static void PrintProgressBar(float progress, ProgressBarStyle style, string title = "")
         {
-            ProgressBar progressBar = new ProgressBar(100, 1, 100, 0);
+            ProgressBar progressBar = new ProgressBar();
 
             if (progress < 0)
                 throw new ArgumentOutOfRangeException("Progress must be more than 0.");
@@ -309,6 +330,37 @@ namespace DNA_CLI_Framework
             else
                 progressBar.Progress = progress;
 
+            progressBar.Title = title;
+            progressBar.Style = style;
+
+            progressBar.PrintProgressBar();
+        }
+
+        /// <summary>
+        /// Prints a Progress Bar to the Console given the Progress Value
+        /// </summary>
+        /// <param name="progress"> The Progress Value </param>
+        /// <param name="title"> The Title of the Progress Bar </param>
+        /// <exception cref="ArgumentOutOfRangeException"> Thrown if the Progress Value is invalid in any way Less than 0, More than 100 </exception>
+        public static void PrintProgressBar(float progress, string title = "")
+        {
+            ProgressBar progressBar = new ProgressBar();
+
+            if (progress < 0)
+                throw new ArgumentOutOfRangeException("Progress must be more than 0.");
+
+            if (progress > 1)
+            {
+                if (progress > 100)
+                    throw new ArgumentOutOfRangeException("Progress must be less than 100.");
+
+                progressBar.ProgressPercentage = progress;
+            }
+            else
+                progressBar.Progress = progress;
+
+            progressBar.Title = title;
+
             progressBar.PrintProgressBar();
         }
 
@@ -318,9 +370,10 @@ namespace DNA_CLI_Framework
         /// <param name="value"> The Value of the </param>
         /// <param name="maxValue"> The Max Value of the Progress Bar </param>
         /// <param name="minValue"> The Minimum Value of the Progress Bar </param>
-        public static void PrintProgressBar(float value, float maxValue = 100, float minValue = 0)
+        /// 
+        public static void PrintProgressBar(float value, ProgressBarStyle style, string title = "", float maxValue = 100, float minValue = 0,bool useBorder = false)
         {
-            PrintProgressBar(value, maxValue, minValue, 100, 1, false);
+            PrintProgressBar(value, style, title, maxValue, minValue, 100, 1, useBorder);
         }
 
         /// <summary>
@@ -332,10 +385,12 @@ namespace DNA_CLI_Framework
         /// <param name="width"> The Width of the Progress Bar </param>
         /// <param name="height"> The Height of the Progress Bar </param>
         /// <param name="useBorder"></param>
-        public static void PrintProgressBar(float value, float maxValue, float minValue, int width, int height, bool useBorder = false)
+        public static void PrintProgressBar(float value, ProgressBarStyle style, string title, float maxValue, float minValue, int width, int height, bool useBorder = false)
         {
-            ProgressBar progressBar = new ProgressBar(width, height, maxValue, minValue);
+            ProgressBar progressBar = new ProgressBar(maxValue, minValue, title, width, height);
             progressBar.Value = value;
+            progressBar.Title = title;
+            progressBar.Style = style;
             progressBar.UseBorder = useBorder;
             progressBar.PrintProgressBar();
         }

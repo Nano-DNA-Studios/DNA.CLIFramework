@@ -93,7 +93,7 @@ namespace DNA_CLI_Framework
         /// </summary>
         /// <param name="width"> The Width of the Table </param>
         /// <param name="title"> The Title of the Table </param>
-        /// <returns></returns>
+        /// <returns> The String Title Centered based on the Width </returns>
         private string CenterTitle(int width, string title)
         {
             int padding = (width - title.Length) / 2;

@@ -6,6 +6,11 @@
     public abstract class DataManager : IDataManager
     {
         /// <summary>
+        /// The Name of the CLI Application
+        /// </summary>
+        public string ApplicationName { get; set; }
+
+        /// <summary>
         /// The Default Command Prefix for the CLI Application  
         /// </summary>
         public const string DEFAULT_COMMAND_PREFIX = "--";
@@ -28,7 +33,7 @@
         /// <summary>
         /// The Path of the Applications Cache
         /// </summary>
-        public string CachePath { get; private set; }
+        public string CachePath { get { return Path.Combine(CWD, $"{ApplicationName}Cache"); } }
 
         /// <inheritdoc/>
         public abstract string COMMAND_PREFIX { get; }
@@ -41,15 +46,6 @@
             ApplicationPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
             CWD = Directory.GetCurrentDirectory();
-        }
-
-        /// <summary>
-        /// Sets the Prefix of the Cache Directory, followed by "Cache"
-        /// </summary>
-        /// <param name="prefix"></param>
-        public void SetCachePrefix(string prefix)
-        {
-            CachePath = Path.Combine(CWD, $"{prefix}Cache");
         }
 
         /// <summary>

@@ -30,6 +30,8 @@ namespace DNA_CLI_Framework
         public CLIApplication()
         {
             DataManager = ApplicationData<T>.Instance();
+
+            DataManager.ApplicationName = ApplicationName;
         }
 
         /// <summary>
@@ -42,6 +44,8 @@ namespace DNA_CLI_Framework
                 DataManager = new DefaultDataManager();
             else
                 DataManager = dataManager;
+
+            DataManager.ApplicationName = ApplicationName;
         }
 
         /// <summary>

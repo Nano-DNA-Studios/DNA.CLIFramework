@@ -107,8 +107,18 @@ namespace DNA_CLI_Framework.CommandHandlers
             string[] commands = individualCommands.Skip(1).ToArray();
             string[][] additionalCommandArgs = new string[commands.Length][];
             foreach (string command in commands)
-                additionalCommandArgs[commands.ToList().IndexOf(command)] = command.Split(" ").Where(arg => !string.IsNullOrWhiteSpace(arg)).ToArray();
+            {
+                List<string> commandArgs = new List<string>();
 
+                commandArgs.Add(command.Split(" ")[0]);
+
+                string subCommands = command.Split(" ").Skip(1).Aggregate((acc, next) => acc + " " + next);
+
+                commandArgs.AddRange(subCommands.Split("\"").Where(arg => !string.IsNullOrWhiteSpace(arg)).ToArray());
+
+                additionalCommandArgs[commands.ToList().IndexOf(command)] = commandArgs.ToArray();
+            }
+                
             IsOnlyDefaultCommand = commands.Length == 0;
             DefaultCommandArgs = defaultCommandArgs;
             AdditionalCommandArgs = additionalCommandArgs;

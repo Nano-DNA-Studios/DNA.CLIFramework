@@ -142,16 +142,6 @@ namespace DNA_CLI_Framework
                     }
                 }
 
-                while (!process.StandardError.EndOfStream)
-                {
-                    string error = process.StandardError.ReadLine();
-
-                    if (error != null)
-                    {
-                        _standardError.Add(error);
-                    }
-                }
-
                 process.WaitForExit();
 
                 if (process.ExitCode != 0)

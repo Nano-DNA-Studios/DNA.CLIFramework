@@ -22,6 +22,12 @@ namespace DNA_CLI_Framework.CommandHandlers
             if (DefaultCommandArgs.Length == 0)
                 return;
 
+            if (DefaultCommandArgs[0] == string.Empty)
+            {
+                HandleAdditionalCommands();
+                return;
+            }
+
             HandleDefaultCommand();
             HandleAdditionalCommands();
         }

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace DNA_CLI_Framework
 {
@@ -77,6 +76,18 @@ namespace DNA_CLI_Framework
         public void SetOutputRedirect(bool redirectState)
         {
             _outputRedirect = redirectState;
+        }
+
+        /// <summary>
+        /// Changes the Working Directory to the Specified Directory.
+        /// </summary>
+        /// <param name="directory"> The Directory from which the Command will be run </param>
+        public void ChangeWorkingDirectory(string directory)
+        {
+            if (Directory.Exists(directory))
+                _processStartInfo.WorkingDirectory = directory;
+            else
+                Console.WriteLine("Directory does not exist: " + directory);
         }
 
         /// <summary>

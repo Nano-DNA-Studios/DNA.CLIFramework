@@ -33,8 +33,6 @@
         /// <inheritdoc/>
         public abstract string COMMAND_PREFIX { get; }
 
-        
-
         /// <summary>
         /// Default Initializer
         /// </summary>
@@ -45,12 +43,19 @@
             CWD = Directory.GetCurrentDirectory();
         }
 
-        public void SetCacheName (string name)
+        /// <summary>
+        /// Sets the Prefix of the Cache Directory, followed by "Cache"
+        /// </summary>
+        /// <param name="prefix"></param>
+        public void SetCachePrefix(string prefix)
         {
-            CachePath = Path.Combine(CWD, $"{name}Cache");
+            CachePath = Path.Combine(CWD, $"{prefix}Cache");
         }
 
-        public void CreateCacheDirectory (string prefix)
+        /// <summary>
+        /// Creates the Cache Directory
+        /// </summary>
+        public void CreateCacheDirectory()
         {
             if (string.IsNullOrEmpty(CachePath))
             {

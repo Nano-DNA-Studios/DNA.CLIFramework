@@ -2,7 +2,7 @@
 A C# framework to help quickly CLI Apps and Tools for crossplatform devices.
 
 
-Inspired by a Framework I used at a previous COOP for Automation, the Framework makes it so that Command implementation requires minimal code, with only command implementation, while loading Data, cross command communication, customization and more is all done for you, or can be modularly swapped out using your own custom implementation.
+Inspired by a Framework I used at a previous COOP for Automation, the Framework makes it so that Command implementation requires minimal code, while loading Data, cross command communication, customization and more is already implementend, or can be modularly swapped out with your own version.
 
 Additional "Nice to haves" are included in the framework such as Progress Bars and Tables allowing you to cleanly display Data.
 

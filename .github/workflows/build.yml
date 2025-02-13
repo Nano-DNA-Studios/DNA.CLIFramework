@@ -29,22 +29,22 @@ jobs:
     needs: setup
     runs-on: self-hosted
     steps:
-      - name: Build Default Framework-Dependent Version (for NuGet)
+      - name: Build for NuGet 
         shell: bash
         run: dotnet publish -c Release -f net8.0 --no-restore -o bin/Release/net8.0
 
-  pack:
+  pack-nuget:
     needs: [setup, build-nuget]
     runs-on: self-hosted
     steps:
-      - name: Pack NuGet Packages
+      - name: Pack for NuGet
         id: pack-nuget
         shell: bash
         run: dotnet pack -c Release --no-restore --no-build 
 
   names:
     runs-on: self-hosted
-    needs: [setup, build-nuget, pack]
+    needs: [setup, build-nuget, pack-nuget]
     outputs:
       packages: ${{ steps.extract-nuget-packages.outputs.PACKAGES}}
 
@@ -89,23 +89,47 @@ jobs:
           path: ./nupkg/${{ matrix.packages }}
           retention-days: 1
 
-  build:
-    needs: [setup, build-nuget, pack, upload-nuget]
+  build-source:
+    needs: [setup, build-nuget, pack-nuget, upload-nuget]
     runs-on: self-hosted
     strategy:
-      max-parallel: 3
       matrix:
         platforms: ["win-x64", "win-x86", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"] # 
     steps:
-      - name: Build for NuGet (Framework Dependent)
+      - name: Build as Standalone Source
         shell: bash
         run: dotnet publish -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
 
-      - name: Upload NuGet packages as build artifacts
+      - name: Upload Standalone Source
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.platforms }}
           path: bin/Release/${{ matrix.platforms }}
           retention-days: 1
 
-  
+
+  publish-to-nuget:
+    needs: [setup, build-nuget, names, build-source]
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        packages: ${{ fromJson(needs.names.outputs.packages) }}
+    steps:
+      - name: Publish to GitHub Packages
+        shell: bash
+        run: |
+
+          dotnet nuget push "./nupkg/${{ matrix.packages }}" \
+            --source "https://nuget.pkg.github.com/Nano-DNA-Studios/index.json" \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate
+
+      - name: Publish to NuGet.org
+        shell: bash
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_KEY }}
+        run: |
+          dotnet nuget push "./nupkg/${{ matrix.packages }}" \
+            --source "https://api.nuget.org/v3/index.json" \
+            --api-key "$NUGET_API_KEY" \
+            --skip-duplicate

@@ -52,7 +52,7 @@ jobs:
   #      run: dotnet pack -c Release --runtime linux-x86 --no-restore --no-build 
   names:
     runs-on: self-hosted
-    needs: [setup, build, pack]
+    needs: [setup, build]
     outputs:
       packages: ${{ steps.extract-nuget-packages.outputs.PACKAGES}}
 

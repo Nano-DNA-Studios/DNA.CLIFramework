@@ -21,7 +21,7 @@
 		<ProductName>$(RootNamespace)</ProductName>
 		<AssemblyName>$(RootNamespace)</AssemblyName>
 		<OutputType>Library</OutputType>
-		<OutputPath>bin/$(RuntimeIdentifier)/$(Configuration)</OutputPath>
+		<OutputPath>bin/$(Configuration)</OutputPath>
 		<PackageOutputPath>../nupkg</PackageOutputPath>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>

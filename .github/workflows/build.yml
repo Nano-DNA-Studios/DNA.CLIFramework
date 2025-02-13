@@ -33,12 +33,10 @@ jobs:
         platforms: ["win-x64", "win-x86", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"]
     steps:
       - name: Build for NuGet (Framework Dependent)
-        id: build-nuget
         shell: bash
-        run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -r "${{ matrix.platforms }}" --self-contained false --no-restore -o bin/${{ matrix.platforms }}
+        run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -r "${{ matrix.platforms }}" --self-contained false --no-restore -o bin/Release/${{ matrix.platforms }}
 
       - name: Build Standalone Executable (Self-Contained)
-        id: build-standalone
         shell: bash
         run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/standalone/${{ matrix.platforms }}
 

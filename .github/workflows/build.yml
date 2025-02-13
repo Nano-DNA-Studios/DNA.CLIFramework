@@ -44,29 +44,29 @@ jobs:
       packages: ${{ steps.extract-nuget-packages.outputs.PACKAGES}}
 
     steps:
-    - name: Extract Nuget Package Names
-      id: extract-nuget-packages
-      shell: bash
-      run: |
-        packageNames=()
-        while IFS= read -r file; do
-            packageNames+=("$(basename "$file")")
-        done < <(find . -type f -name "*.nupkg")
+      - name: Extract Nuget Package Names
+        id: extract-nuget-packages
+        shell: bash
+        run: |
+          packageNames=()
+          while IFS= read -r file; do
+              packageNames+=("$(basename "$file")")
+          done < <(find . -type f -name "*.nupkg")
 
-        for package in "${packageNames[@]}"; do
-            echo "Package : $package"
-        done
+          if [ ${#packageNames[@]} -eq 0 ]; then
+              echo "No packages found. Setting empty JSON array."
+              packageJson="[]"
+          elif [ ${#packageNames[@]} -eq 1 ]; then
+              echo "Single Package Detected. Formatting in JSON Manually"
+              packageJson="[\"${packageNames[0]}\"]"
+          else
+              echo "Packing as JSON Array"
+              packageJson=$(printf '%s\n' "${packageNames[@]}" | jq -R . | jq -s .)
+          fi
 
-        if [ "${#packageNames[@]}" -eq 1 ]; then
-            echo "Single Package Detected. Formatting in JSON Manually"
-            packageJson="[\"${packageNames[0]}\"]"
-        else
-            echo "Packing as JSON Array"
-            packageJson=$(printf '%s\n' "${packageNames[@]}" | jq -R . | jq -s .)
-        fi
+          echo "JSON : $packageJson"
+          echo "PACKAGES=$packageJson" >> "$GITHUB_OUTPUT"
 
-        echo "JSON : $packageJson"
-        echo "PACKAGES=$packageJson" >> "$GITHUB_OUTPUT"
 
   # build:
   #   runs-on: self-hosted

@@ -64,8 +64,12 @@ jobs:
               packageJson=$(printf '%s\n' "${packageNames[@]}" | jq -R . | jq -s .)
           fi
 
+          # Ensure proper JSON formatting and escaping
+          packageJson=$(echo "$packageJson" | jq -c .)
+
           echo "JSON : $packageJson"
           echo "PACKAGES=$packageJson" >> "$GITHUB_OUTPUT"
+
 
 
   # build:

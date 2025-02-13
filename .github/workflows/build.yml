@@ -131,7 +131,7 @@ jobs:
 
   upload:
     runs-on: self-hosted
-    needs: build
+    needs: [setup, build, names]
     strategy:
       matrix:
         packages: ${{ fromJson(needs.names.outputs.packages) }}

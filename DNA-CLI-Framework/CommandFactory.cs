@@ -1,9 +1,9 @@
-﻿using DNA_CLI_Framework.Commands;
+﻿using DNA.CLIFramework.Commands;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace DNA_CLI_Framework
+namespace DNA.CLIFramework
 {
     /// <summary>
     /// Command Factory that is responsible for creating instances of Commands based on the Command Name

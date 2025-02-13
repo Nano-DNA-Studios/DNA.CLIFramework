@@ -1,5 +1,5 @@
 ﻿
-namespace DNA_CLI_Framework.Data
+namespace DNA.CLIFramework.Data
 {
     internal interface IDataManager
     {

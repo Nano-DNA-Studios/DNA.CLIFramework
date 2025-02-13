@@ -1,8 +1,8 @@
-﻿using DNA_CLI_Framework.Commands;
+﻿using DNA.CLIFramework.Commands;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DNA_CLI_Framework.CommandHandlers
+namespace DNA.CLIFramework.CommandHandlers
 {
     /// <summary>
     /// The CLI Framework Command Handler, responsible for handling the Commands passed in by the User

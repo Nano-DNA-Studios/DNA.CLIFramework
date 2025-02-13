@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace DNA_CLI_Framework
+namespace DNA.CLIFramework
 {
     /// <summary>
     /// Process Handler for the Console Application.

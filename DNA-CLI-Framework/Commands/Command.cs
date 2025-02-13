@@ -1,5 +1,5 @@
 ﻿
-namespace DNA_CLI_Framework.Commands
+namespace DNA.CLIFramework.Commands
 {
     /// <summary>
     /// Represents a Command that can be executed by the CLI Tool

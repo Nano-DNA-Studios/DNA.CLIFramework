@@ -43,7 +43,7 @@ jobs:
     steps:
       - name: Build for NuGet (Framework Dependent)
         shell: bash
-        run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore
+        run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -r "${{ matrix.platforms }}" --self-contained false --no-restore
 
       #- name: Build Standalone Executable (Self-Contained)
       #  shell: bash

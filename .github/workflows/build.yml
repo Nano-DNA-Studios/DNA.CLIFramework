@@ -67,9 +67,6 @@ jobs:
         echo "JSON : $packageJson"
         echo "PACKAGES=$packageJson" >> "$GITHUB_OUTPUT"
 
-
-    
-  
   # build:
   #   runs-on: self-hosted
   #   outputs:

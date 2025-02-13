@@ -44,7 +44,7 @@ jobs:
       - name: Pack NuGet Packages
         id: pack-nuget
         shell: bash
-        run: dotnet pack -c Release --no-restore --no-build 
+        run: dotnet pack -c Release --runtime linux-x86 --no-restore --no-build 
   names:
     runs-on: self-hosted
     needs: [setup, build, pack]

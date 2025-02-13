@@ -30,21 +30,26 @@ jobs:
     runs-on: self-hosted
     strategy:
       matrix:
-        platforms: ["linux-x64", "linux-x86", "osx-x64", "osx-arm64", "win-x64", "win-x86"]
+        platforms: ["x64", "x86", "Any CPU", "ARM64", "ARM32"]
     steps:
       - name: Build Platform
         id: build-platform
         shell: bash
-        run: dotnet build -c Release --runtime ${{ matrix.platforms }} --no-restore
+        run: dotnet build -c Release -p:Platform="${{ matrix.platforms }}" --no-restore
 
-  pack:
-    needs: [setup, build]
-    runs-on: self-hosted
-    steps:
-      - name: Pack NuGet Packages
-        id: pack-nuget
+      - name: Pack Platform
+        id: pack-platform
         shell: bash
-        run: dotnet pack -c Release --runtime linux-x86 --no-restore --no-build 
+        run: dotnet pack -c Release -p:Platform="${{ matrix.platforms }}" --no-restore --no-build 
+
+  #pack:
+  #  needs: [setup, build]
+  #  runs-on: self-hosted
+  #  steps:
+  #    - name: Pack NuGet Packages
+  #      id: pack-nuget
+  #      shell: bash
+  #      run: dotnet pack -c Release --runtime linux-x86 --no-restore --no-build 
   names:
     runs-on: self-hosted
     needs: [setup, build, pack]

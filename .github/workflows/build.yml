@@ -25,10 +25,19 @@ jobs:
       - name: Run .NET Restore to reload NuGet Packages
         run: dotnet restore
 
+  build-nuget:
+    needs: setup
+    runs-on: self-hosted
+    steps:
+      - name: Build Default Framework-Dependent Version (for NuGet)
+        shell: bash
+        run: dotnet build DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release --no-restore -o bin/Release/net8.0/
+
   build:
     needs: setup
     runs-on: self-hosted
     strategy:
+      max-parallel: 3
       matrix:
         platforms: ["win-x64", "win-x86", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"]
     steps:

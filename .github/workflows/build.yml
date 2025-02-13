@@ -37,9 +37,17 @@ jobs:
         shell: bash
         run: dotnet build -c Release -p:Platform="${{ matrix.platforms }}" --no-restore
 
+  pack:
+    needs: [setup, build]
+    runs-on: self-hosted
+    steps:
+      - name: Pack NuGet Packages
+        id: pack-nuget
+        shell: bash
+        run: dotnet pack -c Release --no-restore --no-build 
   names:
     runs-on: self-hosted
-    needs: [setup, build]
+    needs: [setup, build, pack]
     outputs:
       packages: ${{ steps.extract-nuget-packages.outputs.PACKAGES}}
 
@@ -51,7 +59,7 @@ jobs:
           packageNames=()
           while IFS= read -r file; do
               packageNames+=("$(basename "$file")")
-          done < <(find ../nupkg -type f -name "*.nupkg")
+          done < <(find . -type f -name "*.nupkg")
 
           if [ ${#packageNames[@]} -eq 0 ]; then
               echo "No packages found. Setting empty JSON array."

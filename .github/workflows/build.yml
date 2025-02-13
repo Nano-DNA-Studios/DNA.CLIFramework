@@ -33,8 +33,17 @@ jobs:
         shell: bash
         run: dotnet build DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release --no-restore
 
+  pack:
+    needs: [setup, build-nuget]
+    runs-on: self-hosted
+    steps:
+      - name: Pack NuGet Packages
+        id: pack-nuget
+        shell: bash
+        run: dotnet pack -c Release --no-restore --no-build 
+
   build:
-    needs: setup
+    needs: [setup, build-nuget, pack]
     runs-on: self-hosted
     strategy:
       max-parallel: 3
@@ -58,15 +67,6 @@ jobs:
       #  id: pack-platform
       #  shell: bash
       #  run: dotnet pack -c Release -p:Platform="${{ matrix.platforms }}" --no-restore --no-build 
-
-  pack:
-    needs: [setup, build]
-    runs-on: self-hosted
-    steps:
-      - name: Pack NuGet Packages
-        id: pack-nuget
-        shell: bash
-        run: dotnet pack -c Release --no-restore --no-build 
 
   names:
     runs-on: self-hosted

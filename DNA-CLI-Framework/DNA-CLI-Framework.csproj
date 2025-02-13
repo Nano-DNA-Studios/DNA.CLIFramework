@@ -22,7 +22,7 @@
 		<AssemblyName>$(RootNamespace)</AssemblyName>
 		<OutputType>Library</OutputType>
 		<!--<OutputPath>bin/$(Configuration)</OutputPath>-->
-		<OutputPath>bin/$(RuntimeIdentifier)/$(Configuration)/$(TargetFramework)</OutputPath>
+		<OutputPath>bin/$(Configuration)/$(RuntimeIdentifier)</OutputPath>
 		<PackageOutputPath>../nupkg</PackageOutputPath>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>

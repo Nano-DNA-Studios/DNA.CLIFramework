@@ -22,7 +22,7 @@
 		<AssemblyName>$(RootNamespace)</AssemblyName>
 		<OutputType>Library</OutputType>
 		<OutputPath>bin/$(Platform)/$(Configuration)</OutputPath>
-		<PackageOutputPath>../nupkg/$(Platform)/$(Configuration)/</PackageOutputPath>
+		<PackageOutputPath>../nupkg</PackageOutputPath>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 

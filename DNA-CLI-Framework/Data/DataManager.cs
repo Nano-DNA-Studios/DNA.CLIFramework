@@ -1,4 +1,8 @@
-﻿namespace DNA_CLI_Framework.Data
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace DNA_CLI_Framework.Data
 {
     /// <summary>
     /// The Base Structure for a Data Manager for the CLI Application

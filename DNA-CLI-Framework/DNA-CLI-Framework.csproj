@@ -1,10 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>DNA_CLI_Framework</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<!-- Project Owner and Version Metadata -->
+	<PropertyGroup>
+		<RootNamespace>DNA.CLI-Framework</RootNamespace>
+		<Company>NanoDNA Studios</Company>
+		<Copyright>NanoDNA Studios</Copyright>
+		<Version>0.0.0</Version>
+	</PropertyGroup>
+
+	<!-- Project Configuration Metadata -->
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RuntimeIdentifiers>win-x64;win-x86;linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>
+		<Configurations>Debug;Release</Configurations>
+		<Platforms>AnyCPU;x64;x86;ARM64;ARM32</Platforms>
+	</PropertyGroup>
+
+	<!-- Building / Publishing Metadata -->
+	<PropertyGroup>
+		<ProductName>$(RootNamespace)</ProductName>
+		<AssemblyName>$(RootNamespace)</AssemblyName>
+		<OutputType>Library</OutputType>
+		<OutputPath>bin/$(Configuration)</OutputPath>
+		<PackageOutputPath>../nupkg</PackageOutputPath>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<!-- Miscellaneous -->
+	<PropertyGroup>
+		<DocumentationFile>$(OutputPath)/$(RootNamespace).xml</DocumentationFile>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+		<EnableDefaultCompileItems>True</EnableDefaultCompileItems>
+		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+	</PropertyGroup>
+
+	
+
+	<!-- Add Individual Platforms in NuGet Package -->
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<None Include="..\README.md" Pack="true" PackagePath="" />
+
+		
+	</ItemGroup>
+
 
 </Project>

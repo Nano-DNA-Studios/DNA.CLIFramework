@@ -41,29 +41,7 @@
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
 		<None Include="..\README.md" Pack="true" PackagePath="" />
 
-		<!-- Windows x64 -->
-		<None Include="bin\win-x64\Release\$(TargetFramework)\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" />
-		<None Include="bin\win-x64\Release\$(TargetFramework)\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" />
-
-		<!-- Windows x86 -->
-		<None Include="bin\win-x86\Release\$(TargetFramework)\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" />
-		<None Include="bin\win-x86\Release\$(TargetFramework)\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" />
-
-		<!-- Linux x64 -->
-		<None Include="bin\linux-x64\Release\$(TargetFramework)\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" />
-		<None Include="bin\linux-x64\Release\$(TargetFramework)\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" />
-
-		<!-- Linux ARM64 -->
-		<None Include="bin\linux-arm64\Release\$(TargetFramework)\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-arm64\lib\$(TargetFramework)" />
-		<None Include="bin\linux-arm64\Release\$(TargetFramework)\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\linux-arm64\lib\$(TargetFramework)" />
-
-		<!-- macOS x64 -->
-		<None Include="bin\osx-x64\Release\$(TargetFramework)\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\osx-x64\lib\$(TargetFramework)" />
-		<None Include="bin\osx-x64\Release\$(TargetFramework)\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\osx-x64\lib\$(TargetFramework)" />
-
-		<!-- macOS ARM64 -->
-		<None Include="bin\osx-arm64\Release\$(TargetFramework)\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\osx-arm64\lib\$(TargetFramework)" />
-		<None Include="bin\osx-arm64\Release\$(TargetFramework)\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\osx-arm64\lib\$(TargetFramework)" />
+		
 	</ItemGroup>
 
 

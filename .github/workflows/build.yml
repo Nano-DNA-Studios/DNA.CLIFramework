@@ -72,21 +72,27 @@ jobs:
   #   runs-on: self-hosted
   #   outputs:
   #     packages:
+
   #   steps:
   #     - name: Setup .NET
   #       uses: actions/setup-dotnet@v4
   #       with:
   #         dotnet-version: "8.x.x"
+
   #     - name: Checkout repository
   #       uses: actions/checkout@v4
+
   #     - name: Restore NuGet Packages
   #       run: dotnet restore
+
   #     - name: Dotnet Build x86
   #       id: dotnet-build-x86
   #       run: dotnet build -c Release -p:Platform="x86" --no-restore
+
   #     - name: Dotnet Build x64
   #       id: dotnet-build-x64
   #       run: dotnet build -c Release -p:Platform="x64" --no-restore
+  
   #     - name: Dotnet Build AnyCPU
   #       id: dotnet-build-AnyCPU
   #       run: dotnet build -c Release -p:Platform="Any CPU" --no-restore

@@ -35,10 +35,7 @@
 		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(SelfContained)' == 'true'">
-		<PublishSingleFile>true</PublishSingleFile>
-		<SelfContained>true</SelfContained>
-	</PropertyGroup>
+	
 
 	<!-- Add Individual Platforms in NuGet Package -->
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">

@@ -35,7 +35,7 @@ jobs:
       - name: Build Platform
         id: build-platform
         shell: bash
-        run: dotnet build DNA-CLI-Framework.csproj -c Release -p:RuntimeIdentifier="${{ matrix.platforms }}" --no-restore
+        run: dotnet build DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -p:RuntimeIdentifier="${{ matrix.platforms }}" --no-restore
 
       #- name: Pack Platform
       #  id: pack-platform

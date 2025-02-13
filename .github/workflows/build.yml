@@ -28,14 +28,24 @@ jobs:
   build:
     needs: setup
     runs-on: self-hosted
-    #strategy:
-    #  matrix:
-    #    platforms: ["win-x64", "win-x86", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"]
+    strategy:
+      matrix:
+        platforms: ["win-x64", "win-x86", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"]
     steps:
-      - name: Build Platform
-        id: build-platform
+      - name: Build for NuGet (Framework Dependent)
+        id: build-nuget
         shell: bash
-        run: dotnet build -c Release --no-restore
+        run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -r "${{ matrix.platforms }}" --self-contained false --no-restore -o bin/${{ matrix.platforms }}
+
+      - name: Build Standalone Executable (Self-Contained)
+        id: build-standalone
+        shell: bash
+        run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/standalone/${{ matrix.platforms }}
+
+      #- name: Build Platform
+      #  id: build-platform
+      #  shell: bash
+      #  run: dotnet build DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -p:RuntimeIdentifier="${{ matrix.platforms }}" --no-restore
 
       #- name: Pack Platform
       #  id: pack-platform

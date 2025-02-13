@@ -15,7 +15,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.x.x"
-          install-dir: ~/.dotnet
 
       - name: Checkout repository
         uses: actions/checkout@v4

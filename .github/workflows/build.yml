@@ -5,7 +5,7 @@ on:
 
 permissions:
   contents: read # Gives permission to read/write to the repo
-  packages: read # Gives permission to read/write nuget packages
+  packages: write # Gives permission to read/write nuget packages
 
 jobs:
   setup:

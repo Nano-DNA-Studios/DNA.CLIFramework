@@ -2,7 +2,7 @@
 
 	<!-- Project Owner and Version Metadata -->
 	<PropertyGroup>
-		<RootNamespace>DNA.CLI-Framework</RootNamespace>
+		<RootNamespace>DNA.CLIFramework</RootNamespace>
 		<Company>NanoDNA Studios</Company>
 		<Copyright>NanoDNA Studios</Copyright>
 		<Version>0.0.0</Version>

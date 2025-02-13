@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace DNA_CLI_Framework.CommandHandlers
+namespace DNA.CLIFramework.CommandHandlers
 {
     /// <summary>
     /// Handles Commands that are passed in by the User, checks if the Command is a File or Directory and then executes the Command. If the Command is a Directory, it will execute the Command for each File in the Directory, otherwise it will only run for the File

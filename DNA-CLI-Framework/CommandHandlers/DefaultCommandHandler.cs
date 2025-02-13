@@ -1,5 +1,5 @@
 ﻿
-namespace DNA_CLI_Framework.CommandHandlers
+namespace DNA.CLIFramework.CommandHandlers
 {
     /// <summary>
     /// The Default Command Handler for the CLI Application

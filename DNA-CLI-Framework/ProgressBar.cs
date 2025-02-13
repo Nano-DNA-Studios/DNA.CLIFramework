@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DNA_CLI_Framework
+namespace DNA.CLIFramework
 {
     /// <summary>
     /// Represents a Progress Bar that can be displayed in the Console

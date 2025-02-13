@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DNA_CLI_Framework
+namespace DNA.CLIFramework
 {
     /// <summary>
     /// Represents a Data Table that can be printed to the Console

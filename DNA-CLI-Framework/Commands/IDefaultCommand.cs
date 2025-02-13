@@ -1,4 +1,4 @@
-﻿namespace DNA_CLI_Framework.Commands
+﻿namespace DNA.CLIFramework.Commands
 {
     /// <summary>
     /// Represents the Structure for handling the default command case after the CLI Tool keyword. There a 2 execution paths for the Default Command, one with Trailing Commands and one without

@@ -1,5 +1,5 @@
 ﻿
-namespace DNA_CLI_Framework.Data
+namespace DNA.CLIFramework.Data
 {
     /// <summary>
     /// A Class Storing all the Resources for the CLI Tool

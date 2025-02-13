@@ -1,8 +1,8 @@
-﻿using DNA_CLI_Framework.Data;
-using DNA_CLI_Framework.CommandHandlers;
+﻿using DNA.CLIFramework.Data;
+using DNA.CLIFramework.CommandHandlers;
 using System;
 
-namespace DNA_CLI_Framework
+namespace DNA.CLIFramework
 {
     /// <summary>
     /// Represents the CLI Application, handles all Interaction with the CLI Tool

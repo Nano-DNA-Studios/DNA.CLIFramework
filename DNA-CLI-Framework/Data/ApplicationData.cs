@@ -1,5 +1,5 @@
 ﻿
-namespace DNA_CLI_Framework.Data
+namespace DNA.CLIFramework.Data
 {
     /// <summary>
     /// Singleton that creates the ApplicationData Object from the Data Manager class

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace DNA_CLI_Framework.Data
+namespace DNA.CLIFramework.Data
 {
     /// <summary>
     /// The Base Structure for a Data Manager for the CLI Application

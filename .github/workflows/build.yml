@@ -34,6 +34,7 @@ jobs:
     steps:
       - name: Build Platform
         id: build-platform
+        shell: bash
         run: sudo dotnet build -c Release -p:Platform=${{ matrix.platforms }} --no-restore
 
   names:

@@ -52,21 +52,8 @@ jobs:
     steps:
       - name: Build for NuGet (Framework Dependent)
         shell: bash
-        run: dotnet build DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -p:RuntimeIdentifier="${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
+        run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
 
-      #- name: Build Standalone Executable (Self-Contained)
-      #  shell: bash
-      #  run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/standalone/${{ matrix.platforms }}
-
-      #- name: Build Platform
-      #  id: build-platform
-      #  shell: bash
-      #  run: dotnet build DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -p:RuntimeIdentifier="${{ matrix.platforms }}" --no-restore
-
-      #- name: Pack Platform
-      #  id: pack-platform
-      #  shell: bash
-      #  run: dotnet pack -c Release -p:Platform="${{ matrix.platforms }}" --no-restore --no-build 
 
   names:
     runs-on: self-hosted

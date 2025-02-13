@@ -51,7 +51,7 @@ jobs:
           packageNames=()
           while IFS= read -r file; do
               packageNames+=("$(basename "$file")")
-          done < <(find . -type f -name "*.nupkg")
+          done < <(find ../nupkg -type f -name "*.nupkg")
 
           if [ ${#packageNames[@]} -eq 0 ]; then
               echo "No packages found. Setting empty JSON array."

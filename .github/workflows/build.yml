@@ -107,13 +107,10 @@ jobs:
   #         $packageNames = Get-ChildItem -Path . -Filter "*.nupkg" -Recurse | ForEach-Object {
   #              $_.Name
   #          }
-
   #          foreach ($package in $packageNames) {
   #              Write-Output "Package : $package"
   #          }
-
   #          $packageJson = {}
-
   #          if ($packageNames.Count -eq 1) {
   #              Write-Output "Single Package Detected. Formatting in JSON Manually"
   #              $packageJson = "[`"" + ($packageNames -join "`", `"") + "`"]"
@@ -122,7 +119,6 @@ jobs:
   #              Write-Output "Packing as JSON Array"
   #              $packageJson = $packageNames | ConvertTo-Json -Compress
   #          }
-
   #          Write-Output "JSON : $packageJson"
   #          Write-Output "PACKAGES=$packageJson" >> $env:GITHUB_OUTPUT
 

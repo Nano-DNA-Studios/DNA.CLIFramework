@@ -30,12 +30,12 @@ jobs:
     runs-on: self-hosted
     strategy:
       matrix:
-        platforms: ["x64", "x86", "Any CPU", "ARM64", "ARM32"]
+        platforms: ["win-x64", "win-x86", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"]
     steps:
       - name: Build Platform
         id: build-platform
         shell: bash
-        run: dotnet build -c Release -p:Platform="${{ matrix.platforms }}" --no-restore
+        run: dotnet build -c Release -p:RuntimeIdentifier="${{ matrix.platforms }}" --no-restore
 
       #- name: Pack Platform
       #  id: pack-platform

@@ -22,14 +22,14 @@
 		<AssemblyName>$(RootNamespace)</AssemblyName>
 		<OutputType>Library</OutputType>
 		<!--<OutputPath>bin/$(Configuration)</OutputPath>-->
-		<OutputPath>bin/$(Configuration)/$(RuntimeIdentifier)</OutputPath>
+		<OutputPath>bin/$(Configuration)</OutputPath>
 		<PackageOutputPath>../nupkg</PackageOutputPath>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
 	<!-- Miscellaneous -->
 	<PropertyGroup>
-		<DocumentationFile>$(OutputPath)/$(RootNamespace).xml</DocumentationFile>
+		<!--<DocumentationFile>$(OutputPath)/$(RootNamespace).xml</DocumentationFile>-->
 		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
 		<EnableDefaultCompileItems>True</EnableDefaultCompileItems>
 		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>

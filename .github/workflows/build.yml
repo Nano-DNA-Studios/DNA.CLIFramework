@@ -50,6 +50,7 @@ jobs:
         id: pack-nuget
         shell: bash
         run: dotnet pack -c Release --no-restore --no-build 
+
   names:
     runs-on: self-hosted
     needs: [setup, build, pack]

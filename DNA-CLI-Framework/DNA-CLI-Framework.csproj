@@ -37,44 +37,44 @@
 	<!-- Add Individual Platforms in NuGet Package -->
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
 		<None Include="..\README.md" Pack="true" PackagePath="" />
-	</ItemGroup>
+	
 
 	<!-- Windows x64 -->
-	<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'x64'">
+	<!--<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'x64'">-->
 		<None Include="bin\x64\Release\net8.0\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x64\lib\net8.0" />
 		<None Include="bin\x64\Release\net8.0\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\win-x64\lib\net8.0" />
-	</ItemGroup>
+	<!--</ItemGroup>-->
 
 	<!-- Windows x86 -->
-	<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'x86'">
+	<!--<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'x86'">-->
 		<None Include="bin\x86\Release\net8.0\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x86\lib\net8.0" />
 		<None Include="bin\x86\Release\net8.0\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\win-x86\lib\net8.0" />
-	</ItemGroup>
+	<!--</ItemGroup>-->
 
 	<!-- Linux x64 -->
-	<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'linux-x64'">
+	<!--<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'linux-x64'">-->
 		<None Include="bin\linux-x64\Release\net8.0\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\net8.0" />
 		<None Include="bin\linux-x64\Release\net8.0\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\linux-x64\lib\net8.0" />
-	</ItemGroup>
+	<!--</ItemGroup>-->
 
 	<!-- Linux ARM64 -->
-	<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'linux-arm64'">
+	<!--<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'linux-arm64'">-->
 		<None Include="bin\linux-arm64\Release\net8.0\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-arm64\lib\net8.0" />
 		<None Include="bin\linux-arm64\Release\net8.0\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\linux-arm64\lib\net8.0" />
-	</ItemGroup>
+	<!--</ItemGroup>-->
 
 	<!-- macOS x64 -->
-	<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'osx-x64'">
+	<!--<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'osx-x64'">-->
 		<None Include="bin\osx-x64\Release\net8.0\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\osx-x64\lib\net8.0" />
 		<None Include="bin\osx-x64\Release\net8.0\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\osx-x64\lib\net8.0" />
-	</ItemGroup>
+	<!--</ItemGroup>-->
 
 	<!-- macOS ARM64 -->
-	<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'osx-arm64'">
+	<!--<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(Platform)' == 'osx-arm64'">-->
 		<None Include="bin\osx-arm64\Release\net8.0\$(AssemblyName).dll" Pack="true" PackagePath="runtimes\osx-arm64\lib\net8.0" />
 		<None Include="bin\osx-arm64\Release\net8.0\$(AssemblyName).xml" Pack="true" PackagePath="runtimes\osx-arm64\lib\net8.0" />
+	<!--</ItemGroup>-->
 	</ItemGroup>
-
 
 
 </Project>

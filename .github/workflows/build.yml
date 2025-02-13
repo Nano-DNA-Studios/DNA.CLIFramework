@@ -30,7 +30,7 @@ jobs:
     runs-on: self-hosted
     strategy:
       matrix:
-        platforms: ["x64", "x86", "AnyCPU", "ARM64", "ARM32"]
+        platforms: ["x64", "x86", "Any CPU", "ARM64", "ARM32"]
     steps:
       - name: Build Platform
         id: build-platform

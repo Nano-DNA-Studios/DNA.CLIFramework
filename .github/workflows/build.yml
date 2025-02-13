@@ -35,7 +35,7 @@ jobs:
       - name: Build Platform
         id: build-platform
         shell: bash
-        run: dotnet build -c Release --runtime ${{ matrix.platforms }}" --no-restore
+        run: dotnet build -c Release --runtime ${{ matrix.platforms }} --no-restore
 
   pack:
     needs: [setup, build]

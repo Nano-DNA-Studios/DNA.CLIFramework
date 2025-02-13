@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Build Platform
         id: build-platform
-        run: sudo dotnet build -c Release -p:Platform=${{ matrix.platforms }} --no-restore
+        run: dotnet build -c Release -p:Platform=${{ matrix.platforms }} --no-restore
 
   names:
     runs-on: self-hosted

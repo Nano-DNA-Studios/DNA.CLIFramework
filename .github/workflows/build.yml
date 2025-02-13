@@ -42,22 +42,9 @@ jobs:
         shell: bash
         run: dotnet pack -c Release --no-restore --no-build 
 
-  build:
-    needs: [setup, build-nuget, pack]
-    runs-on: self-hosted
-    strategy:
-      max-parallel: 3
-      matrix:
-        platforms: ["win-x64"] # "win-x86", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"
-    steps:
-      - name: Build for NuGet (Framework Dependent)
-        shell: bash
-        run: dotnet publish -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
-
-
   names:
     runs-on: self-hosted
-    needs: [setup, build, pack]
+    needs: [setup, build-nuget, pack]
     outputs:
       packages: ${{ steps.extract-nuget-packages.outputs.PACKAGES}}
 
@@ -88,9 +75,9 @@ jobs:
           echo "JSON : $packageJson"
           echo "PACKAGES=$packageJson" >> "$GITHUB_OUTPUT"
 
-  upload:
+  upload-nuget:
     runs-on: self-hosted
-    needs: [setup, build, names]
+    needs: [setup, build-nuget, names]
     strategy:
       matrix:
         packages: ${{ fromJson(needs.names.outputs.packages) }}
@@ -101,3 +88,24 @@ jobs:
           name: ${{ matrix.packages }}
           path: ./nupkg/${{ matrix.packages }}
           retention-days: 1
+
+  build:
+    needs: [setup, build-nuget, pack, upload-nuget]
+    runs-on: self-hosted
+    strategy:
+      max-parallel: 3
+      matrix:
+        platforms: ["win-x64", "win-x86", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"] # 
+    steps:
+      - name: Build for NuGet (Framework Dependent)
+        shell: bash
+        run: dotnet publish -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
+
+      - name: Upload NuGet packages as build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platforms }}
+          path: bin/Release/${{ matrix.platforms }}
+          retention-days: 1
+
+  

@@ -11,18 +11,18 @@ jobs:
   setup:
     runs-on: self-hosted
     steps:
-      - name: Setup .NET
+      - name: Install .NET to Device
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.x.x"
 
-      - name: Checkout repository
+      - name: Clone and Checkout the Repo
         uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Restore NuGet Packages
+      - name: Run .NET Restore to reload NuGet Packages
         run: dotnet restore
 
   build:
@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Build Platform
         id: build-platform
-        run: dotnet build -c Release -p:Platform=${{ matrix.platforms }} --no-restore
+        run: sudo dotnet build -c Release -p:Platform=${{ matrix.platforms }} --no-restore
 
   names:
     runs-on: self-hosted

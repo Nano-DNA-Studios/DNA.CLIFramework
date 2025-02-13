@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Build Default Framework-Dependent Version (for NuGet)
         shell: bash
-        run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -f net8.0 --no-restore -o bin/Release/net8.0
+        run: dotnet publish -c Release -f net8.0 --no-restore -o bin/Release/net8.0
 
   pack:
     needs: [setup, build-nuget]
@@ -52,7 +52,7 @@ jobs:
     steps:
       - name: Build for NuGet (Framework Dependent)
         shell: bash
-        run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
+        run: dotnet publish -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
 
 
   names:
@@ -87,59 +87,6 @@ jobs:
 
           echo "JSON : $packageJson"
           echo "PACKAGES=$packageJson" >> "$GITHUB_OUTPUT"
-
-
-
-  # build:
-  #   runs-on: self-hosted
-  #   outputs:
-  #     packages:
-
-  #   steps:
-  #     - name: Setup .NET
-  #       uses: actions/setup-dotnet@v4
-  #       with:
-  #         dotnet-version: "8.x.x"
-
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-
-  #     - name: Restore NuGet Packages
-  #       run: dotnet restore
-
-  #     - name: Dotnet Build x86
-  #       id: dotnet-build-x86
-  #       run: dotnet build -c Release -p:Platform="x86" --no-restore
-  #     - name: Dotnet Build x64
-  #       id: dotnet-build-x64
-  #       run: dotnet build -c Release -p:Platform="x64" --no-restore
-  #     - name: Dotnet Build AnyCPU
-  #       id: dotnet-build-AnyCPU
-  #       run: dotnet build -c Release -p:Platform="Any CPU" --no-restore
-  #     - name: Dotnet Pack
-  #       id: dotnet-pack
-  #       run: dotnet pack -c Release --no-restore --no-build
-  #     - name: Extract Nuget Package Names
-  #       id: extract-nuget-packages
-  #       shell: powershell
-  #       run: |
-  #         $packageNames = Get-ChildItem -Path . -Filter "*.nupkg" -Recurse | ForEach-Object {
-  #              $_.Name
-  #          }
-  #          foreach ($package in $packageNames) {
-  #              Write-Output "Package : $package"
-  #          }
-  #          $packageJson = {}
-  #          if ($packageNames.Count -eq 1) {
-  #              Write-Output "Single Package Detected. Formatting in JSON Manually"
-  #              $packageJson = "[`"" + ($packageNames -join "`", `"") + "`"]"
-  #          } else
-  #          {
-  #              Write-Output "Packing as JSON Array"
-  #              $packageJson = $packageNames | ConvertTo-Json -Compress
-  #          }
-  #          Write-Output "JSON : $packageJson"
-  #          Write-Output "PACKAGES=$packageJson" >> $env:GITHUB_OUTPUT
 
   upload:
     runs-on: self-hosted

@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Build Default Framework-Dependent Version (for NuGet)
         shell: bash
-        run: dotnet build DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release --no-restore
+        run: dotnet publish DNA-CLI-Framework/DNA-CLI-Framework.csproj -c Release -f net8.0 --no-restore -o bin/Release/net8.0
 
   pack:
     needs: [setup, build-nuget]

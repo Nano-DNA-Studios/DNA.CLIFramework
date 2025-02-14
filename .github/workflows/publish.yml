@@ -45,7 +45,7 @@ jobs:
     runs-on: self-hosted
     needs: setup
     outputs:
-      packages: ${{ steps.extract-nuget-packages.outputs.PACKAGES}}
+      packages: ${{ steps.extract-package-names.outputs.PACKAGES}}
     steps:
       - name: Build for NuGet 
         shell: bash
@@ -57,7 +57,7 @@ jobs:
         run: dotnet pack -c Release --no-restore --no-build 
 
       - name: Extract Nuget Package Names
-        id: extract-nuget-packages
+        id: extract-package-names
         shell: bash
         run: |
           packageNames=()
@@ -89,14 +89,14 @@ jobs:
       matrix:
         packages: ${{ fromJson(needs.build-nuget.outputs.packages) }}
     steps:
-      - name: Upload NuGet Packages as Build Artifacts
+      - name: Upload NuGet Packages to Actions Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.packages }}
           path: ./nupkg/${{ matrix.packages }}
           retention-days: 1
 
-      - name: Upload NuGet packages to Release
+      - name: Upload NuGet Packages to Release
         working-directory: ./nupkg/
         shell: bash
         run: |
@@ -130,7 +130,7 @@ jobs:
           path: bin/Release/${{ matrix.platforms }}
           retention-days: 1
 
-      - name: Upload NuGet packages to Release
+      - name: Upload Standalone Sources to Release
         working-directory: bin/Release/
         shell: bash
         run: |

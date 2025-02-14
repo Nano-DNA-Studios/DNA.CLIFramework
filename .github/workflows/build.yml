@@ -4,8 +4,8 @@ on:
   pull_request:
 
 permissions:
-  contents: read # Gives permission to read/write to the repo
-  packages: write # Gives permission to read/write nuget packages
+  contents: read 
+  packages: read
 
 jobs:
   setup:
@@ -29,7 +29,7 @@ jobs:
     runs-on: self-hosted
     needs: setup
     outputs:
-      packages: ${{ steps.extract-nuget-packages.outputs.PACKAGES}}
+      packages: ${{ steps.extract-package-names.outputs.PACKAGES}}
     steps:
       - name: Build for NuGet 
         shell: bash
@@ -40,8 +40,8 @@ jobs:
         shell: bash
         run: dotnet pack -c Release --no-restore --no-build 
 
-      - name: Extract Nuget Package Names
-        id: extract-nuget-packages
+      - name: Extract NuGet Package Names
+        id: extract-package-names
         shell: bash
         run: |
           packageNames=()
@@ -106,30 +106,3 @@ jobs:
           name: ${{ matrix.platforms }}
           path: bin/Release/${{ matrix.platforms }}
           retention-days: 1
-
-
-  #publish-to-nuget:
-  #  needs: [setup, build-nuget, names, build-source]
-  #  runs-on: self-hosted
-  #  strategy:
-  #    matrix:
-  #      packages: ${{ fromJson(needs.names.outputs.packages) }}
-  #  steps:
-  #    - name: Publish to GitHub Packages
-  #      shell: bash
-  #      run: |
-#
-  #        dotnet nuget push "./nupkg/${{ matrix.packages }}" \
-  #          --source "https://nuget.pkg.github.com/Nano-DNA-Studios/index.json" \
-  #          --api-key ${{ secrets.GITHUB_TOKEN }} \
-  #          --skip-duplicate
-#
-  #    - name: Publish to NuGet Website
-  #      shell: bash
-  #      env:
-  #        NUGET_API_KEY: ${{ secrets.NUGET_KEY }}
-  #      run: |
-  #        dotnet nuget push "./nupkg/${{ matrix.packages }}" \
-  #          --source "https://api.nuget.org/v3/index.json" \
-  #          --api-key "$NUGET_API_KEY" \
-  #          --skip-duplicate

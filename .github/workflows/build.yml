@@ -26,29 +26,20 @@ jobs:
         run: dotnet restore
 
   build-nuget:
-    needs: setup
     runs-on: self-hosted
+    needs: setup
+    outputs:
+      packages: ${{ steps.extract-nuget-packages.outputs.PACKAGES}}
     steps:
       - name: Build for NuGet 
         shell: bash
         run: dotnet publish -c Release -f net8.0 --no-restore -o bin/Release/net8.0
 
-  pack-nuget:
-    needs: build-nuget
-    runs-on: self-hosted
-    steps:
       - name: Pack for NuGet
         id: pack-nuget
         shell: bash
         run: dotnet pack -c Release --no-restore --no-build 
 
-  names:
-    runs-on: self-hosted
-    needs: pack-nuget
-    outputs:
-      packages: ${{ steps.extract-nuget-packages.outputs.PACKAGES}}
-
-    steps:
       - name: Extract Nuget Package Names
         id: extract-nuget-packages
         shell: bash
@@ -75,12 +66,22 @@ jobs:
           echo "JSON : $packageJson"
           echo "PACKAGES=$packageJson" >> "$GITHUB_OUTPUT"
 
+
+  #names:
+  #  runs-on: self-hosted
+  #  needs: pack-nuget
+  #  outputs:
+  #    packages: ${{ steps.extract-nuget-packages.outputs.PACKAGES}}
+#
+  #  steps:
+      
+
   upload-nuget:
     runs-on: self-hosted
-    needs: names
+    needs: build-nuget
     strategy:
       matrix:
-        packages: ${{ fromJson(needs.names.outputs.packages) }}
+        packages: ${{ fromJson(needs.build-nuget.outputs.packages) }}
     steps:
       - name: Upload NuGet packages as build artifacts
         uses: actions/upload-artifact@v4
@@ -93,7 +94,7 @@ jobs:
     needs: setup
     runs-on: self-hosted
     strategy:
-      max-parallel: 3
+      max-parallel: 6
       matrix:
         platforms: ["win-x64", "win-x86", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"] # 
     steps:
@@ -101,6 +102,14 @@ jobs:
         shell: bash
         run: dotnet publish -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
 
+  upload-source:
+    needs: build-source
+    runs-on: self-hosted
+    strategy:
+      max-parallel: 6
+      matrix:
+        platforms: ["win-x64", "win-x86", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"] # 
+    steps:
       - name: Upload Standalone Source
         uses: actions/upload-artifact@v4
         with:

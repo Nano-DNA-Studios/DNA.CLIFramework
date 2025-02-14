@@ -116,7 +116,7 @@ jobs:
     steps:
       - name: Build as Standalone Source
         shell: bash
-        run: dotnet publish -c Release -r "${{ matrix.platforms }}" -p:Version=${{ needs.version.outputs.version }} --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
+        run: dotnet publish -c Release -r "${{ matrix.platforms }}" -p:Version=${{ needs.version.outputs.version }} --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}-${{ needs.version.outputs.version }}
   
   upload-source:
     needs: [build-source, version]
@@ -132,14 +132,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.platforms }}-${{ needs.version.outputs.version }}
-          path: bin/Release/${{ matrix.platforms }}
+          path: bin/Release/${{ matrix.platforms }}-${{ needs.version.outputs.version }}
           retention-days: 1
 
       - name: Upload Standalone Sources to Release
         working-directory: bin/Release/
         shell: bash
         run: |
-          echo "Uploading ${{ matrix.platforms }} as a Release Asset"
+          echo "Uploading ${{ matrix.platforms }}-${{ needs.version.outputs.version }} as a Release Asset"
           gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.platforms }}-${{ needs.version.outputs.version }}" --repo ${{ github.repository }}
 
   publish-to-nuget:

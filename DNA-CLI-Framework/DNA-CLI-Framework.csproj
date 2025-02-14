@@ -34,14 +34,9 @@
 		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
 	</PropertyGroup>
 
-	
-
 	<!-- Add Individual Platforms in NuGet Package -->
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
 		<None Include="..\README.md" Pack="true" PackagePath="" />
-
-		
 	</ItemGroup>
-
 
 </Project>

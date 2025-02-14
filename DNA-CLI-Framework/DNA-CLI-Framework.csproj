@@ -14,7 +14,6 @@
 		<RuntimeIdentifiers>win-x64;win-x86;linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>
 		<Configurations>Debug;Release</Configurations>
 		<Platforms>AnyCPU;x64;x86;ARM64;ARM32</Platforms>
-		<PublishTrimmed>true</PublishTrimmed>
 	</PropertyGroup>
 
 	<!-- Building / Publishing Metadata -->

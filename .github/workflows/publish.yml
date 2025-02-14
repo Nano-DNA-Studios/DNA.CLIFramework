@@ -4,8 +4,8 @@ on:
     types: published
 
 permissions:
-    contents: write
-    packages: write
+  contents: write
+  packages: write
 
 jobs:
   setup:
@@ -100,8 +100,8 @@ jobs:
         working-directory: ./nupkg/
         shell: bash
         run: |
-            echo "Uploading ${{ matrix.packages }} as a Release Asset"
-            gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.packages }}" --repo ${{ github.repository }}
+          echo "Uploading ${{ matrix.packages }} as a Release Asset"
+          gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.packages }}" --repo ${{ github.repository }}
 
   build-source:
     needs: [setup, version]
@@ -134,8 +134,8 @@ jobs:
         working-directory: bin/Release/
         shell: bash
         run: |
-            echo "Uploading ${{ matrix.platforms }} as a Release Asset"
-            gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.platforms }}" --repo ${{ github.repository }}
+          echo "Uploading ${{ matrix.platforms }} as a Release Asset"
+          gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.platforms }}" --repo ${{ github.repository }}
 
   publish-to-nuget:
     needs: [setup, build-nuget, build-source]

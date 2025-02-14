@@ -21,6 +21,7 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.GITHUB_TOKEN }}
+          clean: true
 
       - name: Run .NET Restore to reload NuGet Packages
         run: dotnet restore

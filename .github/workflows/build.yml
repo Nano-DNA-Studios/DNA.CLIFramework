@@ -100,12 +100,12 @@ jobs:
         shell: bash
         run: dotnet publish -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
 
-      #- name: Upload Standalone Source
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #    name: ${{ matrix.platforms }}
-      #    path: bin/Release/${{ matrix.platforms }}
-      #    retention-days: 1
+      - name: Upload Standalone Source
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platforms }}
+          path: bin/Release/${{ matrix.platforms }}
+          retention-days: 1
 
 
   #publish-to-nuget:

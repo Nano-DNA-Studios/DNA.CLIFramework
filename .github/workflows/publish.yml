@@ -1,11 +1,11 @@
-name: Build
+name: Publish
 on:
-  workflow_dispatch:
-  pull_request:
+  release:
+    types: published
 
 permissions:
-  contents: read # Gives permission to read/write to the repo
-  packages: write # Gives permission to read/write nuget packages
+    contents: write
+    packages: write
 
 jobs:
   setup:
@@ -24,6 +24,22 @@ jobs:
 
       - name: Run .NET Restore to reload NuGet Packages
         run: dotnet restore
+
+  version:
+    runs-on: self-hosted
+    needs: setup
+    outputs:
+      version: ${{ steps.get-tag-version.outputs.version }}
+
+    steps:
+      - name: Get Tag Version
+        id: get-tag-version
+        shell: bash
+        run: |
+          tagName="${{ github.event.release.tag_name }}"
+          version="${tagName#v}"  # Removes the 'v' prefix if it exists
+          echo "Extracted version $version from tag"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
   build-nuget:
     runs-on: self-hosted
@@ -73,12 +89,19 @@ jobs:
       matrix:
         packages: ${{ fromJson(needs.build-nuget.outputs.packages) }}
     steps:
-      - name: Upload NuGet packages as build artifacts
+      - name: Upload NuGet Packages as Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.packages }}
           path: ./nupkg/${{ matrix.packages }}
           retention-days: 1
+
+      - name: Upload NuGet packages to Release
+        working-directory: ./nupkg/
+        shell: bash
+        run: |
+            echo "Uploading ${{ matrix.packages }} as a Release Asset"
+            gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.packages }}" --repo ${{ github.repository }}
 
   build-source:
     needs: setup
@@ -91,7 +114,7 @@ jobs:
       - name: Build as Standalone Source
         shell: bash
         run: dotnet publish -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
-
+  
   upload-source:
     needs: build-source
     runs-on: self-hosted
@@ -107,29 +130,35 @@ jobs:
           path: bin/Release/${{ matrix.platforms }}
           retention-days: 1
 
+      - name: Upload NuGet packages to Release
+        working-directory: bin/Release/
+        shell: bash
+        run: |
+            echo "Uploading ${{ matrix.platforms }} as a Release Asset"
+            gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.platforms }}" --repo ${{ github.repository }}
 
-  #publish-to-nuget:
-  #  needs: [setup, build-nuget, names, build-source]
-  #  runs-on: self-hosted
-  #  strategy:
-  #    matrix:
-  #      packages: ${{ fromJson(needs.names.outputs.packages) }}
-  #  steps:
-  #    - name: Publish to GitHub Packages
-  #      shell: bash
-  #      run: |
-#
-  #        dotnet nuget push "./nupkg/${{ matrix.packages }}" \
-  #          --source "https://nuget.pkg.github.com/Nano-DNA-Studios/index.json" \
-  #          --api-key ${{ secrets.GITHUB_TOKEN }} \
-  #          --skip-duplicate
-#
-  #    - name: Publish to NuGet Website
-  #      shell: bash
-  #      env:
-  #        NUGET_API_KEY: ${{ secrets.NUGET_KEY }}
-  #      run: |
-  #        dotnet nuget push "./nupkg/${{ matrix.packages }}" \
-  #          --source "https://api.nuget.org/v3/index.json" \
-  #          --api-key "$NUGET_API_KEY" \
-  #          --skip-duplicate
+  publish-to-nuget:
+    needs: [setup, build-nuget, build-source]
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        packages: ${{ fromJson(needs.build-nuget.outputs.packages) }}
+
+    steps:
+      - name: Publish to GitHub Packages
+        shell: bash
+        run: |
+          dotnet nuget push "./nupkg/${{ matrix.packages }}" \
+          --source "https://nuget.pkg.github.com/Nano-DNA-Studios/index.json" \
+          --api-key ${{ secrets.GITHUB_TOKEN }} \
+          --skip-duplicate
+          
+      - name: Publish to NuGet Website
+        shell: bash
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_KEY }}
+        run: |
+          dotnet nuget push "./nupkg/${{ matrix.packages }}" \
+          --source "https://api.nuget.org/v3/index.json" \
+          --api-key "$NUGET_API_KEY" \
+          --skip-duplicate

@@ -100,7 +100,7 @@ jobs:
     steps:
       - name: Build as Standalone Source
         shell: bash
-        run: dotnet publish -c Release -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
+        run: dotnet publish -c Release -p:PublishTrimmed=true -r "${{ matrix.platforms }}" --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}
 
   upload-source:
     needs: build-source

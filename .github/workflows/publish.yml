@@ -116,7 +116,7 @@ jobs:
     steps:
       - name: Build as Standalone Source
         shell: bash
-        run: dotnet publish -c Release -r "${{ matrix.platforms }}" -p:Version=${{ needs.version.outputs.version }} --self-contained true --no-restore -o bin/Release/${{ matrix.platforms }}-${{ needs.version.outputs.version }}
+        run: dotnet publish -c Release -r "${{ matrix.platforms }}" -p:Version=${{ needs.version.outputs.version }} --self-contained true --no-restore -o bin/Release/${{ github.event.repository.name }}-${{ matrix.platforms }}
   
   upload-source:
     needs: [build-source, version]
@@ -128,19 +128,23 @@ jobs:
       matrix:
         platforms: ["win-x64", "win-x86", "linux-x64", "linux-arm64", "osx-x64", "osx-arm64"]
     steps:
+      - name: Compress Standalone Source
+        shell: bash
+        run: tar -czf bin/Release/${{ github.event.repository.name }}-${{ needs.version.outputs.version }}-${{ matrix.platforms }}.tar.gz bin/Release/${{ github.event.repository.name }}-${{ matrix.platforms }}
+
       - name: Upload Standalone Source
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.platforms }}-${{ needs.version.outputs.version }}
-          path: bin/Release/${{ matrix.platforms }}-${{ needs.version.outputs.version }}
+          name: ${{ github.event.repository.name }}-${{ needs.version.outputs.version }}-${{ matrix.platforms }}.tar.gz
+          path: bin/Release/${{ github.event.repository.name }}-${{ needs.version.outputs.version }}-${{ matrix.platforms }}.tar.gz
           retention-days: 1
 
       - name: Upload Standalone Sources to Release
         working-directory: bin/Release/
         shell: bash
         run: |
-          echo "Uploading ${{ matrix.platforms }}-${{ needs.version.outputs.version }} as a Release Asset"
-          gh release upload "${{ github.event.release.tag_name }}" "${{ matrix.platforms }}-${{ needs.version.outputs.version }}" --repo ${{ github.repository }}
+          echo "Uploading ${{ github.event.repository.name }}-${{ needs.version.outputs.version }}-${{ matrix.platforms }}.tar.gz as a Release Asset"
+          gh release upload "${{ github.event.release.tag_name }}" "${{ github.event.repository.name }}-${{ needs.version.outputs.version }}-${{ matrix.platforms }}.tar.gz" --repo ${{ github.repository }}
 
   publish-to-nuget:
     needs: [setup, build-nuget, build-source]
